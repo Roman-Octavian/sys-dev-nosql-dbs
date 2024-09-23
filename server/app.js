@@ -15,7 +15,7 @@ app.use(
 app.use(express.json());
 
 app.use(studentRouter);
-app.use(topicRouter);
+app.use('/api/v1', topicRouter);
 app.use(activityRouter);
 
 const PORT = process.env.PORT ?? 8080;

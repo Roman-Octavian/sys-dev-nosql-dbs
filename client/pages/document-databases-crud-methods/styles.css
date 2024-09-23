@@ -1,0 +1,98 @@
+/* Container for CRUD section */
+#page-cont-crud {
+  color: #cdcdcd;
+  text-align: justify;
+  max-width: 50vw;
+  margin-bottom: 3em;
+  font-size: x-large;
+}
+
+#page-cont-crud h1 {
+  line-height: 3.5em;
+}
+
+#page-cont-crud h2 {
+  line-height: 2.5em;
+}
+
+#page-cont-crud h3 {
+  line-height: 1.5em;
+}
+
+/* Table styles for dark mode */
+#topics-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2b2b2b; /* Dark background for table */
+}
+
+#topics-table th,
+#topics-table td {
+  border: 1px solid #444; /* Dark border for table cells */
+  padding: 10px;
+  text-align: left;
+}
+
+#topics-table th {
+  background-color: #009341;
+  color: white;
+}
+
+#topics-table td {
+  color: #cdcdcd;
+}
+
+#topics-table input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #1e1e1e; /* Dark background for input fields */
+  color: #cdcdcd; /* Light text for inputs */
+  border: 1px solid #444; /* Darker border for inputs */
+}
+
+/* General Button Styles */
+button {
+  padding: 5px 10px;
+  margin: 5px;
+  background-color: #009341;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* Delete button with a red color */
+.delete-btn {
+  background-color: #af4c58;
+}
+
+/* Disabled button styling */
+button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* Hover effect for buttons */
+button:hover {
+  background-color: #006c2a;
+}
+
+.delete-btn:hover {
+  background-color: #922f38;
+}
+
+/* Add-row button specific styling */
+#add-row {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #006c2a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#add-row:hover {
+  background-color: #004e1d;
+}
