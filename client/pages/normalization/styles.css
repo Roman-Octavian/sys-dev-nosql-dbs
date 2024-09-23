@@ -1,9 +1,9 @@
 #page-cont-norm {
   color: #cdcdcd;
-  text-align: center;
-  text-justify: auto;
-  max-width: 70vw;
+  text-align: justify;
+  max-width: 50vw;
   margin-bottom: 3em;
+  font-size: x-large;
 }
 
 #page-cont-norm h1,
@@ -25,10 +25,14 @@ h3 {
 }
 
 #page-cont-norm img {
-  max-width: 50vw;
+  width: 100%;
   margin: 1em 0;
 }
 
 .img-small {
-  max-width: 30vw !important;
+  width: 100%;
+  text-align: center;
+}
+.img-small img {
+  max-width: 30vw;
 }
