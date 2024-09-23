@@ -1,6 +1,7 @@
 # Database Course Winter 2024 NoSQL Project
 
 ## First time setup:
+
 ```bash
 git clone https://github.com/Roman-Octavian/sys-dev-nosql-dbs.git
 ```
@@ -64,6 +65,7 @@ git push origin feature/new-task-name-goes-here
 Change your `DATABASE_NAME` in your `.env` folder to the name of your new desired database name.
 
 Then run:
+
 ```bash
 npm run initialize-db
 ```
