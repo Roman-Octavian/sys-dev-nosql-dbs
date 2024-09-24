@@ -172,6 +172,8 @@ main {
   margin-top: 2rem;
   width: 100%;
   justify-content: center;
+  color: #cdcdcd;
+  font-size: x-large;
 }
 
 #main-content {
