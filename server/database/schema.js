@@ -134,6 +134,8 @@ try {
     },
   });
 
+  await database.collection('student').createIndex({ email: 1 }, { unique: true });
+
   await database.createCollection('student_activity_join', {
     validator: {
       $jsonSchema: {
