@@ -132,6 +132,26 @@ toggleAuth.addEventListener('click', (e) => {
   }
 });
 
+// Reset the popup form fields
+function resetPopup() {
+  // Reset popup to its initial state
+  popupTitle.textContent = 'Login';
+  nameInput.style.display = 'none';
+  emailInput.style.display = 'flex';
+  passwordInput.style.display = 'flex';
+  authSubmit.style.display = 'block';
+  authSubmit.textContent = 'Login';
+  toggleAuth.style.display = 'block';
+  toggleAuth.innerHTML = 'Don\'t have an account? <a href="#">Sign Up</a>';
+  // Clear any error/success messages
+  hideMessage();
+
+  // Clear the input fields
+  authForm.email.value = '';
+  authForm.password.value = '';
+  authForm.name.value = '';
+}
+
 // Handle form submission (login/signup)
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -234,11 +254,13 @@ logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     updateAuthButtons();
     popup.style.display = 'none';
+    resetPopup();
   }, 1500);
 });
 
 // Show login popup when login button is clicked
 loginBtn.addEventListener('click', () => {
+  resetPopup();
   popup.style.display = 'block';
   popupTitle.textContent = 'Login';
   nameInput.style.display = 'none';
@@ -248,6 +270,7 @@ loginBtn.addEventListener('click', () => {
 
 // Show sign up popup when sign up button is clicked
 signupBtn.addEventListener('click', () => {
+  resetPopup();
   popup.style.display = 'block';
   popupTitle.textContent = 'Sign Up';
   nameInput.style.display = 'flex';
