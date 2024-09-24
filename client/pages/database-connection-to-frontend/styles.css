@@ -37,6 +37,12 @@ img {
   margin-bottom: 1.5rem;
 }
 
+#fetch-quizzes-btn:hover {
+  cursor: pointer;
+  background: #555;
+  color: white;
+}
+
 #quizzes-table {
   width: 100%;
   border-collapse: separate;

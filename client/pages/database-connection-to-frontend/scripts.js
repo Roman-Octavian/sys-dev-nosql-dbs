@@ -15,6 +15,7 @@ topics.forEach((topic) => {
 });
 
 fetchBtn.addEventListener('click', async () => {
+  console.log('button');
   try {
     const topicName = encodeURIComponent('Database Connection to Frontend');
     const quizzesQuery = await fetch('http://localhost:8080/api/v1/activity/quizzes/' + topicName);
@@ -25,6 +26,7 @@ fetchBtn.addEventListener('click', async () => {
     if (quizzes.length > 0) {
       quizzesTable.style.display = 'table';
 
+      console.log(quizzes);
       quizzes.forEach((quizz) => {
         if (quizz.activity_details && quizz.activity_details.length > 0) {
           const details = quizz.activity_details[0];
@@ -37,8 +39,12 @@ fetchBtn.addEventListener('click', async () => {
           const typeCell = document.createElement('td');
           typeCell.textContent = details.type;
 
+          const completedCell = document.createElement('td');
+          completedCell.textContent = quizz.is_completed ? 'Yes' : 'No';
+
           row.appendChild(nameCell);
           row.appendChild(typeCell);
+          row.appendChild(completedCell);
 
           quizzesTbody.appendChild(row);
         }

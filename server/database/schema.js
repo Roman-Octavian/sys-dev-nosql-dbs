@@ -2,6 +2,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
 import { insertERDiagramsData } from './dummyDataERD.js';
+import { insertDatabaseConnectionData } from './dummyDataFrontend';
 
 if (process.env.DATABASE_CONNECTION_STRING == null) {
   throw new Error('Connection string is not defined');
@@ -170,8 +171,10 @@ async function initializeDatabase() {
     // Indexes
     await createIndexes(database);
 
-    // Dummy data for ERD (should be called before dummy data for front-end connection)
+    // Dummy data
     await insertERDiagramsData(database);
+    await insertDatabaseConnectionData(database);
+
   } catch (e) {
     console.error(e);
   } finally {
