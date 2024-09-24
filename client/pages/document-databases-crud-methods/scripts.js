@@ -27,8 +27,8 @@ async function fetchTopics() {
       <td><input type="text" value="${topic.name}" /></td>
       <td><input type="text" value="${topic.description}" /></td>
       <td>
-        <button class="save-btn" data-id="${topic._id}">Save</button>
-        <button class="delete-btn" data-id="${topic._id}">Delete</button>
+        <button class="save-btn" data-id="${topic.id}">Save</button>
+        <button class="delete-btn" data-id="${topic.id}">Delete</button>
       </td>
     `;
     tbody.appendChild(row);

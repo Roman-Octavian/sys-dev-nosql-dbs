@@ -1,4 +1,4 @@
-const query = await fetch('http://localhost:8080/api/v1/topic');
+const query = await fetch('http://localhost:8080/api/v1/topics');
 const topics = await query.json();
 
 const cards = document.getElementById('card-list');

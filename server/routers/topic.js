@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { database } from '../database/connection.js';
-import { ObjectId } from 'mongodb';
+import { nanoid } from 'nanoid';
 
 const router = Router();
 const topicsCollection = database.collection('topic');
@@ -19,7 +19,7 @@ router.get('/topics', async (req, res) => {
 router.get('/topics/:id', async (req, res) => {
   try {
     const id = decodeURIComponent(req.params.id);
-    const topicData = await topicsCollection.findOne({ _id: new ObjectId(id) });
+    const topicData = await topicsCollection.findOne({ id: id });
 
     if (!topicData) {
       return res.status(404).json({ message: 'topic not found' });
@@ -40,9 +40,9 @@ router.post('/topics', async (req, res) => {
       return res.status(400).json({ message: 'topic data is required' });
     }
 
-    const result = await topicsCollection.insertOne(newTopic);
-    const newTopicId = result.insertedId;
-    const newTopicData = await topicsCollection.findOne({ _id: new ObjectId(newTopicId) });
+    const newTopicId = nanoid();
+    await topicsCollection.insertOne({ id: newTopicId, ...newTopic });
+    const newTopicData = await topicsCollection.findOne({ id: newTopicId });
 
     return res.status(201).json(newTopicData);
   } catch (error) {
@@ -57,11 +57,7 @@ router.put('/topics/:id', async (req, res) => {
     const id = req.params.id;
     const updatedTopic = req.body;
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid topic ID' });
-    }
-
-    const filter = { _id: new ObjectId(id) };
+    const filter = { id: id };
     const update = { $set: updatedTopic };
 
     const result = await topicsCollection.updateOne(filter, update);
@@ -83,11 +79,7 @@ router.delete('/topics/:id', async (req, res) => {
   try {
     const id = req.params.id;
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid topic ID' });
-    }
-
-    const filter = { _id: new ObjectId(id) };
+    const filter = { id: id };
     const result = await topicsCollection.deleteOne(filter);
 
     if (result.deletedCount === 0) {
