@@ -14,7 +14,15 @@ topics.forEach((topic) => {
   dropdown.appendChild(link);
 });
 
+let isTableVisible = false;
+
 fetchBtn.addEventListener('click', async () => {
+  if (isTableVisible) {
+    activityTable.style.display = 'none';
+    isTableVisible = false;
+    return;
+  }
+
   try {
     const topicName = encodeURIComponent('ER Diagrams');
     const activityQuery = await fetch(
@@ -49,6 +57,8 @@ fetchBtn.addEventListener('click', async () => {
       activityTbody.innerHTML = '<tr><td colspan="2">No unfinished activities found</td></tr>';
       activityTable.style.display = 'table';
     }
+
+    isTableVisible = true;
   } catch (error) {
     console.error('Error fetching activities:', error);
   }
