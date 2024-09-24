@@ -75,4 +75,58 @@ router.get('/api/v1/activity/incomplete/:name', async (req, res) => {
   }
 });
 
+router.get('/api/v1/activity/quizzes/:topicname', async (req, res) => {
+  const topicName = decodeURIComponent(req.params.topicname);
+  const userEmail = 'john@example.com';
+
+  try {
+    const student = await database.collection('student').findOne({ email: userEmail });
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    const quizzes = await database
+      .collection('student_activity_join')
+      .aggregate([
+        {
+          $lookup: {
+            from: 'activity',
+            localField: 'activity_id',
+            foreignField: 'id',
+            as: 'activity_details',
+          },
+        },
+        {
+          $lookup: {
+            from: 'topic',
+            localField: 'activity_details.topic_id',
+            foreignField: 'id',
+            as: 'topic_details',
+          },
+        },
+        {
+          $match: {
+            student_id: student.id,
+            'topic_details.name': topicName,
+            activity_details: { $elemMatch: { type: 'quiz' } },
+          },
+        },
+        {
+          $project: {
+            'activity_details.name': 1,
+            'activity_details.type': 1,
+            is_completed: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    return res.status(200).json(quizzes);
+  } catch (e) {
+    console.error('Error fetching quizzes:', e);
+    return res.status(500).json({ error: 'Failed to fetch quizzes', details: e });
+  }
+});
+
 export default router;
