@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 export async function insertERDiagramsData(database) {
   try {
     const topicCollection = database.collection('topic');
