@@ -105,13 +105,12 @@ function validatePassword(password) {
 closePopup.addEventListener('click', () => {
   popup.style.display = 'none';
 });
-
-// // close popup when clicking outside the popup
-// window.addEventListener('click', (e) => {
-//   if (e.target === popup) {
-//     popup.style.display = 'none';
-//   }
-// });
+/*// close popup when clicking outside the popup
+window.addEventListener('click', (e) => {
+  if (e.target === popup) {
+    popup.style.display = 'none';
+  }
+});*/
 
 // Toggle between login and signup
 toggleAuth.addEventListener('click', (e) => {
