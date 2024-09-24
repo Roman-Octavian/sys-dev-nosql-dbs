@@ -1,16 +1,5 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
-import 'dotenv/config';
-import { nanoid } from 'nanoid';
-
-const client = new MongoClient(process.env.DATABASE_CONNECTION_STRING, {
-  serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
-});
-
-async function insertERDiagramsData() {
+export async function insertERDiagramsData(database) {
   try {
-    await client.connect();
-    const database = client.db(process.env.DATABASE_NAME);
-
     const topicCollection = database.collection('topic');
     const activityCollection = database.collection('activity');
     const studentCollection = database.collection('student');
@@ -50,9 +39,5 @@ async function insertERDiagramsData() {
     console.log('Inserted student activities:', joinResult.insertedIds);
   } catch (error) {
     console.error('Error inserting data:', error);
-  } finally {
-    await client.close();
   }
 }
-
-insertERDiagramsData();
