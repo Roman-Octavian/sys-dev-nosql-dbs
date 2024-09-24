@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
-import { TOPICS } from './dummyDataERD.js';
+import { insertERDiagramsData } from './dummyDataERD';
 
 if (process.env.DATABASE_CONNECTION_STRING == null) {
   throw new Error('Connection string is not defined');
