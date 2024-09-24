@@ -21,4 +21,58 @@ router.get('/api/v1/activity/:name', async (req, res) => {
   }
 });
 
+router.get('/api/v1/activity/incomplete/:name', async (req, res) => {
+  const topicName = decodeURIComponent(req.params.name);
+  const userEmail = 'john@example.com';
+
+  try {
+    const student = await database.collection('student').findOne({ email: userEmail });
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    const incompleteActivities = await database
+      .collection('student_activity_join')
+      .aggregate([
+        {
+          $lookup: {
+            from: 'activity',
+            localField: 'activity_id',
+            foreignField: 'id',
+            as: 'activity_details',
+          },
+        },
+        {
+          $lookup: {
+            from: 'topic',
+            localField: 'activity_details.topic_id',
+            foreignField: 'id',
+            as: 'topic_details',
+          },
+        },
+        {
+          $match: {
+            student_id: student.id,
+            is_completed: false,
+            'topic_details.name': topicName,
+          },
+        },
+        {
+          $project: {
+            'activity_details.name': 1,
+            'activity_details.type': 1,
+            is_completed: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    return res.status(200).json(incompleteActivities);
+  } catch (e) {
+    console.error('Error fetching incomplete activities:', e);
+    return res.status(500).json({ error: 'Failed to fetch activities', details: e });
+  }
+});
+
 export default router;
