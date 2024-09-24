@@ -9,9 +9,12 @@ const closePopup = document.getElementById('close-popup');
 const authForm = document.getElementById('auth-form');
 const toggleAuth = document.getElementById('toggle-auth');
 const popupTitle = document.getElementById('popup-title');
-const nameInput = document.getElementById('name');
-const nameLabel = document.getElementById('name-label');
+const nameInput = document.getElementById('name-input');
+const emailInput = document.getElementById('email-input');
+const passwordInput = document.getElementById('password-input');
 const authSubmit = document.getElementById('auth-submit');
+const authMessage = document.getElementById('auth-message');
+const messageContainer = document.querySelector('.message-container');
 
 const loginBtn = document.getElementById('login-btn');
 const signupBtn = document.getElementById('signup-btn');
@@ -71,24 +74,60 @@ function handleTopicClick(path) {
   }
 }
 
+// Function to display messages (error/success)
+function showMessage(message, type = 'error') {
+  messageContainer.style.display = 'flex';
+  authMessage.style.display = 'block';
+  authMessage.textContent = message;
+  authMessage.style.color = type === 'error' ? 'red' : 'green';
+}
+
+// Function to hide messages
+function hideMessage() {
+  messageContainer.style.display = 'none';
+  authMessage.style.display = 'none';
+  authMessage.textContent = '';
+}
+
+// Email validation function
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Password validation function (must contain one number, one capital letter, and one special character)
+function validatePassword(password) {
+  const re = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{8,}$/;
+  return re.test(password);
+}
+
 // Close the popup when the close button is clicked
 closePopup.addEventListener('click', () => {
   popup.style.display = 'none';
 });
 
+// // close popup when clicking outside the popup
+// window.addEventListener('click', (e) => {
+//   if (e.target === popup) {
+//     popup.style.display = 'none';
+//   }
+// });
+
 // Toggle between login and signup
 toggleAuth.addEventListener('click', (e) => {
   e.preventDefault();
+  hideMessage();
+  // Change the popup title and form fields
   if (popupTitle.textContent === 'Login') {
+    // Switch to Sign Up
     popupTitle.textContent = 'Sign Up';
-    nameInput.style.display = 'block';
-    nameLabel.style.display = 'block';
+    nameInput.style.display = 'flex';
     authSubmit.textContent = 'Sign Up';
     toggleAuth.innerHTML = 'Already have an account? <a href="#">Login</a>';
   } else {
+    // Switch to Login
     popupTitle.textContent = 'Login';
     nameInput.style.display = 'none';
-    nameLabel.style.display = 'none';
     authSubmit.textContent = 'Login';
     toggleAuth.innerHTML = 'Don\'t have an account? <a href="#">Sign Up</a>';
   }
@@ -97,13 +136,29 @@ toggleAuth.addEventListener('click', (e) => {
 // Handle form submission (login/signup)
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  hideMessage();
 
   const action = popupTitle.textContent.toLowerCase(); // 'login' or 'sign up'
+  const email = authForm.email.value;
+  const password = authForm.password.value;
+  const name = authForm.name.value;
+  // Input validation
+  if (!validateEmail(email)) {
+    showMessage('Please enter a valid email.', 'error');
+    return;
+  }
+  if (!validatePassword(password)) {
+    showMessage(
+      'Password must be at least 8 characters long and needs to contain a capital letter, a number, and a special character.',
+      'error',
+    );
+    return;
+  }
   const data = {
     action: action === 'sign up' ? 'signup' : 'login',
-    email: authForm.email.value,
-    password: authForm.password.value,
-    ...(action === 'sign up' && { name: authForm.name.value }),
+    email: email,
+    password: password,
+    ...(action === 'sign up' && { name: name }),
   };
 
   try {
@@ -118,26 +173,35 @@ authForm.addEventListener('submit', async (e) => {
     const result = await response.json();
 
     if (response.ok) {
+      // Display success message
+      const successMessage =
+        action === 'sign up' ? 'Account created successfully!' : 'Logged in successfully!';
+      showMessage(successMessage, 'success');
+
       // Store JWT token in localStorage for future requests
       localStorage.setItem('token', result.token);
 
-      // Navigate to the last clicked topic page if available
-      if (lastClickedPath) {
-        window.open(`pages/${lastClickedPath}/index.html`, '_self');
-      }
+      // Wait for a while to show the success message before redirecting
+      setTimeout(() => {
+        popup.style.display = 'none';
+        if (lastClickedPath) {
+          window.open(`pages/${lastClickedPath}/index.html`, '_self');
+        }
+        hideMessage();
+      }, 1500); // Wait 1.5 seconds before closing the popup
 
-      // Hide popup after successful login/signup
-      popup.style.display = 'none';
       updateAuthButtons();
     } else {
-      console.log(result.error); // Display error message if any
+      // Handle server-side error messages
+      showMessage(result.error || 'An error occurred, please try again.', 'error');
     }
   } catch (error) {
     console.error('Error:', error);
+    showMessage('Network error, please try again later.', 'error');
   }
 });
 
-// Update the authentication buttons based on user state
+// Update the authentication buttons based on login state
 function updateAuthButtons() {
   const token = localStorage.getItem('token');
   if (token) {
@@ -153,8 +217,25 @@ function updateAuthButtons() {
 
 // Log out the user
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  updateAuthButtons(); // Update button visibility after logout
+  // Show the logout message in the popup
+  popup.style.display = 'block';
+  nameInput.style.display = 'none';
+  emailInput.style.display = 'none';
+  passwordInput.style.display = 'none';
+  authSubmit.style.display = 'none';
+  messageContainer.style.display = 'flex';
+  popupTitle.textContent = 'Confirmation';
+  authMessage.style.display = 'block';
+  authMessage.textContent = 'You have been logged out.';
+  authMessage.style.color = 'green';
+  toggleAuth.style.display = 'none';
+
+  // Remove the token and update button visibility after a delay
+  setTimeout(() => {
+    localStorage.removeItem('token');
+    updateAuthButtons();
+    popup.style.display = 'none';
+  }, 1500);
 });
 
 // Show login popup when login button is clicked
@@ -162,7 +243,6 @@ loginBtn.addEventListener('click', () => {
   popup.style.display = 'block';
   popupTitle.textContent = 'Login';
   nameInput.style.display = 'none';
-  nameLabel.style.display = 'none';
   authSubmit.textContent = 'Login';
   toggleAuth.innerHTML = 'Don\'t have an account? <a href="#">Sign Up</a>';
 });
@@ -171,8 +251,7 @@ loginBtn.addEventListener('click', () => {
 signupBtn.addEventListener('click', () => {
   popup.style.display = 'block';
   popupTitle.textContent = 'Sign Up';
-  nameInput.style.display = 'block';
-  nameLabel.style.display = 'block';
+  nameInput.style.display = 'flex';
   authSubmit.textContent = 'Sign Up';
   toggleAuth.innerHTML = 'Already have an account? <a href="#">Login</a>';
 });

@@ -28,36 +28,41 @@ router.post('/api/v1/student', async (req, res) => {
       return res.status(400).json({ error: 'Action, email, and password are required' });
     }
 
+    // Get the student collection
     const studentCollection = database.collection('student');
 
+    // Check if the action is login or signup
     if (action === 'login') {
       // Login logic
       const student = await studentCollection.findOne({ email });
       if (!student) {
-        return res.status(404).json('No student found with this email');
+        return res.status(404).json({ error: 'No user found with this email' });
       }
 
+      // Compare the hashed password
       const isMatch = await bcrypt.compare(password, student.password);
       if (!isMatch) {
-        return res.status(401).json('Incorrect password');
+        return res.status(401).json({ error: 'Incorrect password' });
       }
 
+      // Generate JWT after login
       const token = jwt.sign({ email: student.email, id: student.id }, process.env.SECRET_KEY, {
         expiresIn: '1h',
       });
+      // Return the token in the response
       return res.status(200).json({ message: 'Login successful', token });
     } else if (action === 'signup') {
       // Signup logic
       if (!name) {
-        return res.status(400).json('Name is required for signup');
+        return res.status(400).json({ error: 'Name is required for signup' });
       }
 
       // Check if email already exists in the database
       const existingStudent = await studentCollection.findOne({ email });
       if (existingStudent) {
-        return res.status(400).json('Email already in use');
+        return res.status(400).json({ error: 'Email already in use' }); // JSON error format
       }
-
+      // Hash the password before storing it in the database
       const hashedPassword = await bcrypt.hash(password, 10);
       const newStudent = {
         id: nanoid(),
@@ -78,17 +83,13 @@ router.post('/api/v1/student', async (req, res) => {
       } catch (error) {
         if (error.code === 11000) {
           // Duplicate key error code
-          return res.status(400).json('Email already in use');
+          return res.status(400).json({ error: 'Email already in use' });
         }
-        console.error('Error during signup:', error);
-        return res.status(500).json('Internal server error');
       }
-    } else {
-      return res.status(400).json('Invalid action specified');
     }
   } catch (error) {
     console.error('Error during login/signup:', error);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
