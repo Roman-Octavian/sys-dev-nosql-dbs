@@ -191,7 +191,7 @@ ul {
 li {
   margin-bottom: 0.5rem;
 }
-/* Quiz styles
+/* Quiz styles */
 #quiz-container {
   margin-top: 2rem;
   padding: 10px;
@@ -205,6 +205,12 @@ li {
 
 label {
   font-size: 1.25rem;
+}
+
+#quiz-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 #quiz-result {
@@ -235,7 +241,7 @@ label {
 #submit-quiz:active {
   background-color: #3e3f3f;
   transform: scale(0.98);
-} */
+}
 
 /* Responsive adjustments */
 @media only screen and (max-width: 768px) {
