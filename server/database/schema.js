@@ -52,6 +52,7 @@ async function createIndexes(database) {
   await database.collection('student_activity_join').createIndex({ student_id: 1, activity_id: 1 });
   await database.collection('activity').createIndex({ topic_id: 1 });
   await database.collection('topic').createIndex({ name: 1 });
+  await database.collection('student').createIndex({ email: 1 }, { unique: true });
   console.log('Indexes created successfully');
 }
 
