@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
+import { insertDocumentDatabaseData } from './dummyDataDCDB.js';
 import { insertERDiagramsData } from './dummyDataERD.js';
 import { insertDatabaseConnectionData } from './dummyDataFrontend.js';
 
@@ -47,6 +48,7 @@ async function createIndexes(database) {
   await database.collection('student_activity_join').createIndex({ student_id: 1, activity_id: 1 });
   await database.collection('activity').createIndex({ topic_id: 1 });
   await database.collection('topic').createIndex({ name: 1 });
+  await database.collection('student').createIndex({ email: 1 }, { unique: true });
   console.log('Indexes created successfully');
 }
 
@@ -168,6 +170,8 @@ async function initializeDatabase() {
     // Dummy data
     await insertERDiagramsData(database);
     await insertDatabaseConnectionData(database);
+    await insertDocumentDatabaseData(database);
+
   } catch (e) {
     console.error(e);
   } finally {
