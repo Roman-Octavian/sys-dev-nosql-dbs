@@ -1,13 +1,8 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
+import { insertDocumentDatabaseData } from './dummyDataDCDB.js';
 import { insertERDiagramsData } from './dummyDataERD.js';
-
-if (process.env.DATABASE_CONNECTION_STRING == null) {
-  throw new Error('Connection string is not defined');
-} else if (process.env.DATABASE_NAME == null) {
-  throw new Error('Database name is not defined');
-}
 
 const TOPICS = [
   {
@@ -170,8 +165,9 @@ async function initializeDatabase() {
     // Indexes
     await createIndexes(database);
 
-    // Dummy data for ERD (should be called before dummy data for front-end connection)
+    // Dummy data
     await insertERDiagramsData(database);
+    await insertDocumentDatabaseData(database);
   } catch (e) {
     console.error(e);
   } finally {
