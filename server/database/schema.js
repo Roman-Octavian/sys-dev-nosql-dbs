@@ -171,7 +171,6 @@ async function initializeDatabase() {
     await insertERDiagramsData(database);
     await insertDatabaseConnectionData(database);
     await insertDocumentDatabaseData(database);
-
   } catch (e) {
     console.error(e);
   } finally {
