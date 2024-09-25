@@ -1,15 +1,10 @@
 const query = await fetch('http://localhost:8080/api/v1/topic');
 const topics = await query.json();
 
+// DOM elements
 const dropdown = document.getElementById('dropdown-content');
-
-topics.forEach((topic) => {
-  const path = topic.name.toLowerCase().split(' ').join('-');
-  const link = document.createElement('a');
-  link.textContent = topic.name;
-  link.setAttribute('href', `/pages/${path}/index.html`);
-  dropdown.appendChild(link);
-});
+const tbody = document.getElementById('topics-body');
+const addButton = document.getElementById('add-row');
 
 const apiUrl = 'http://localhost:8080/api/v1/topic';
 
@@ -18,17 +13,27 @@ async function fetchTopics() {
   const response = await fetch(apiUrl);
   const topics = await response.json();
   console.log(topics);
-  const tbody = document.getElementById('topics-body');
-  tbody.innerHTML = ''; // Clear the table body
+
+  // Reset dynamic elements
+  tbody.innerHTML = '';
+  dropdown.innerHTML = '';
 
   topics.forEach((topic) => {
+    // Populate navbar dropdown topics selector
+    const path = topic.name.toLowerCase().split(' ').join('-');
+    const link = document.createElement('a');
+    link.textContent = topic.name;
+    link.setAttribute('href', `/pages/${path}/index.html`);
+    dropdown.appendChild(link);
+
+    // Populate table row
     const row = document.createElement('tr');
     row.innerHTML = `
       <td><input type="text" value="${topic.name}" /></td>
       <td><input type="text" value="${topic.description}" /></td>
       <td>
-        <button class="save-btn" data-id="${topic.id}">Save</button>
-        <button class="delete-btn" data-id="${topic.id}">Delete</button>
+        <button class="btn save-btn" data-id="${topic.id}">Save</button>
+        <button class="btn delete-btn" data-id="${topic.id}">Delete</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -80,15 +85,14 @@ async function deleteTopic(event) {
 }
 
 // Function to add a new row for topic creation
-document.getElementById('add-row').addEventListener('click', () => {
-  const tbody = document.getElementById('topics-body');
+addButton.addEventListener('click', () => {
   const row = document.createElement('tr');
 
   row.innerHTML = `
     <td><input type="text" placeholder="New Topic Name" /></td>
     <td><input type="text" placeholder="New Topic Description" /></td>
     <td>
-      <button class="create-btn">Create</button>
+      <button class="btn create-btn">Create</button>
     </td>
   `;
 

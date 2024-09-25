@@ -52,7 +52,7 @@
 }
 
 /* General Button Styles */
-button {
+.btn {
   padding: 5px 10px;
   margin: 5px;
   background-color: #009341;
