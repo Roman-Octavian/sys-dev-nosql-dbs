@@ -46,7 +46,7 @@ nav {
 }
 
 #text > p {
-  color: #0084ff;
+  color: rgb(0, 132, 255);
   font-size: 1.5rem;
   font-family: 'Montserrat', monospace;
 }
@@ -123,8 +123,6 @@ nav {
 
 .card:hover {
   background-color: #adbec4;
-  color: black;
-  cursor: pointer;
 }
 
 #nav-ul {
@@ -146,7 +144,7 @@ nav {
 
 .nav-link:hover {
   text-decoration: underline;
-  color: #0084ff;
+  color: rgb(0, 132, 255);
   font-family: 'Montserrat', monospace;
   animation-name: size;
   animation-duration: 100ms;

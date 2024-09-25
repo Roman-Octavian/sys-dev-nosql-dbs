@@ -3,12 +3,7 @@ import 'dotenv/config';
 import { nanoid } from 'nanoid';
 import { insertDocumentDatabaseData } from './dummyDataDCDB.js';
 import { insertERDiagramsData } from './dummyDataERD.js';
-
-if (process.env.DATABASE_CONNECTION_STRING == null) {
-  throw new Error('Connection string is not defined');
-} else if (process.env.DATABASE_NAME == null) {
-  throw new Error('Database name is not defined');
-}
+import { insertDatabaseConnectionData } from './dummyDataFrontend.js';
 
 const TOPICS = [
   {
@@ -174,7 +169,9 @@ async function initializeDatabase() {
 
     // Dummy data
     await insertERDiagramsData(database);
+    await insertDatabaseConnectionData(database);
     await insertDocumentDatabaseData(database);
+
   } catch (e) {
     console.error(e);
   } finally {
