@@ -18,7 +18,7 @@ async function setupStudentCollection() {
 setupStudentCollection().catch(console.error);
 
 // POST route for student login/signup
-router.post('/api/v1/student', async (req, res) => {
+router.post('/student', async (req, res) => {
   console.log('Request received:', req.body);
   try {
     const { action, name, email, password } = req.body;
