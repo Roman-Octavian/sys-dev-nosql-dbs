@@ -75,7 +75,7 @@ router.get('/activity/incomplete/:name', async (req, res) => {
   }
 });
 
-router.get('/api/v1/activity/quizzes/:topicname', async (req, res) => {
+router.get('/activity/quizzes/:topicname', async (req, res) => {
   const topicName = decodeURIComponent(req.params.topicname);
   const userEmail = 'john@example.com';
 
