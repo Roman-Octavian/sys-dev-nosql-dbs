@@ -1,8 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap');
+
+main {
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 4rem auto;
+  padding: 0 4rem;
+}
+
+.text {
+  color: #b7b7b7;
+  font-size: 1.25rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+ul {
+  color: #cdcdcd;
+  font-size: 1.25rem;
+  margin-left: 20px;
+}
+
+.list-item {
+  margin-bottom: 0.5rem;
+  color: #b7b7b7;
+  font-size: 1.25rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  line-height: 3.5rem;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #b7b7b7;
+}
+
+code {
+  background-color: #2b2b2b;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 100;
+  border: 1px solid #444;
+}
+
 /* Container for CRUD section */
 #page-cont-crud {
   color: #cdcdcd;
   text-align: justify;
-  max-width: 50vw;
   margin-bottom: 3em;
   font-size: x-large;
 }
@@ -65,6 +113,11 @@
 /* Delete button with a red color */
 .delete-btn {
   background-color: #af4c58;
+  min-width: 64px;
+}
+
+.save-btn {
+  min-width: 64px;
 }
 
 /* Disabled button styling */
