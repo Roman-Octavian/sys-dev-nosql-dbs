@@ -11,20 +11,20 @@
   margin-bottom: 1rem;
 }
 
-h2 {
+#main-content h2 {
   color: #e4e2e2;
   font-size: 2rem;
   margin-top: 1.5rem;
 }
 
-p {
+#main-content p {
   color: #b7b7b7;
   font-size: 1.25rem;
   line-height: 1.75;
   margin-bottom: 1rem;
 }
 
-ul {
+#main-content ul {
   color: #cdcdcd;
   font-size: 1.25rem;
   margin-left: 20px;
