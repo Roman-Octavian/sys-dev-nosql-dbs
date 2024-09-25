@@ -14,8 +14,15 @@ topics.forEach((topic) => {
   dropdown.appendChild(link);
 });
 
+let isTableVisible = false;
+
 fetchBtn.addEventListener('click', async () => {
-  console.log('button');
+  if (isTableVisible) {
+    quizzesTable.style.display = 'none';
+    isTableVisible = false;
+    return;
+  }
+
   try {
     const topicName = encodeURIComponent('Database Connection to Frontend');
     const quizzesQuery = await fetch('http://localhost:8080/api/v1/activity/quizzes/' + topicName);
@@ -26,7 +33,6 @@ fetchBtn.addEventListener('click', async () => {
     if (quizzes.length > 0) {
       quizzesTable.style.display = 'table';
 
-      console.log(quizzes);
       quizzes.forEach((quizz) => {
         if (quizz.activity_details && quizz.activity_details.length > 0) {
           const details = quizz.activity_details[0];
@@ -53,6 +59,7 @@ fetchBtn.addEventListener('click', async () => {
       quizzesTbody.innerHTML = '<tr><td colspan="2">No unfinished activities found</td></tr>';
       quizzesTable.style.display = 'table';
     }
+    isTableVisible = true;
   } catch (error) {
     console.error('Error fetching activities:', error);
   }
