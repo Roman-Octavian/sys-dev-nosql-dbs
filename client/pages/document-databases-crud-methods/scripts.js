@@ -1,4 +1,4 @@
-const query = await fetch('http://localhost:8080/api/v1/topics');
+const query = await fetch('http://localhost:8080/api/v1/topic');
 const topics = await query.json();
 
 const dropdown = document.getElementById('dropdown-content');
@@ -11,7 +11,7 @@ topics.forEach((topic) => {
   dropdown.appendChild(link);
 });
 
-const apiUrl = 'http://localhost:8080/api/v1/topics';
+const apiUrl = 'http://localhost:8080/api/v1/topic';
 
 // Function to fetch and display topics
 async function fetchTopics() {

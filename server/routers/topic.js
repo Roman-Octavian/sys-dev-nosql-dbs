@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 const router = Router();
 const topicsCollection = database.collection('topic');
 
-router.get('/topics', async (req, res) => {
+router.get('/topic', async (req, res) => {
   try {
     const topics = await topicsCollection.find({}).toArray();
     return res.status(200).send(topics);
@@ -16,7 +16,7 @@ router.get('/topics', async (req, res) => {
 });
 
 // GET a specific topic by id
-router.get('/topics/:id', async (req, res) => {
+router.get('/topic/:id', async (req, res) => {
   try {
     const id = decodeURIComponent(req.params.id);
     const topicData = await topicsCollection.findOne({ id: id });
@@ -33,7 +33,7 @@ router.get('/topics/:id', async (req, res) => {
 });
 
 // POST create a new topic
-router.post('/topics', async (req, res) => {
+router.post('/topic', async (req, res) => {
   try {
     const newTopic = req.body;
     if (!newTopic) {
@@ -52,7 +52,7 @@ router.post('/topics', async (req, res) => {
 });
 
 // PUT update a topic by ID
-router.put('/topics/:id', async (req, res) => {
+router.put('/topic/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const updatedTopic = req.body;
@@ -75,7 +75,7 @@ router.put('/topics/:id', async (req, res) => {
 });
 
 // DELETE remove a topic by ID
-router.delete('/topics/:id', async (req, res) => {
+router.delete('/topic/:id', async (req, res) => {
   try {
     const id = req.params.id;
 
