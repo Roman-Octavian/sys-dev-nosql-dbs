@@ -83,8 +83,8 @@ accordionButtons.forEach((button) => {
     }
   });
 });
-/*
-// Quiz functionality
+
+//Quiz functionality
 document.getElementById('submit-quiz').addEventListener('click', function () {
   const form = document.getElementById('quiz-form');
   const result = document.getElementById('quiz-result');
@@ -97,7 +97,7 @@ document.getElementById('submit-quiz').addEventListener('click', function () {
     result.textContent = 'Incorrect. Please try again.';
     result.style.color = 'red';
   }
-});*/
+});
 
 // Diagram functionality
 const field1 = document.getElementById('field1');
