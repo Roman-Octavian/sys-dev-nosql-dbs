@@ -182,15 +182,6 @@
   border: none;
 }
 
-ul {
-  color: #cdcdcd;
-  font-size: 1.15rem;
-  margin-left: 20px;
-}
-
-li {
-  margin-bottom: 0.5rem;
-}
 /* Quiz styles */
 #quiz-container {
   margin-top: 2rem;
@@ -245,14 +236,14 @@ label {
 
 /* Responsive adjustments */
 @media only screen and (max-width: 768px) {
-  h1 {
+  #main-content h1 {
     font-size: 2rem;
   }
-  h2 {
+  #main-content h2 {
     font-size: 1.5rem;
   }
-  p,
-  ul {
+  #main-content p,
+  #main-content ul {
     font-size: 1rem;
   }
 }
