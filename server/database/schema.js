@@ -4,12 +4,6 @@ import { nanoid } from 'nanoid';
 import { insertERDiagramsData } from './dummyDataERD.js';
 import { insertDatabaseConnectionData } from './dummyDataFrontend.js';
 
-if (process.env.DATABASE_CONNECTION_STRING == null) {
-  throw new Error('Connection string is not defined');
-} else if (process.env.DATABASE_NAME == null) {
-  throw new Error('Database name is not defined');
-}
-
 const TOPICS = [
   {
     id: nanoid(),
@@ -59,18 +53,7 @@ async function createIndexes(database) {
 async function initializeDatabase() {
   try {
     await client.connect();
-async function createIndexes(database) {
-  await database.collection('student_activity_join').createIndex({ student_id: 1, activity_id: 1 });
-  await database.collection('activity').createIndex({ topic_id: 1 });
-  await database.collection('topic').createIndex({ name: 1 });
-  console.log('Indexes created successfully');
-}
 
-async function initializeDatabase() {
-  try {
-    await client.connect();
-
-    const database = client.db(process.env.DATABASE_NAME);
     const database = client.db(process.env.DATABASE_NAME);
 
     await database.createCollection('topic', {
@@ -96,31 +79,7 @@ async function initializeDatabase() {
         },
       },
     });
-    await database.createCollection('topic', {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          title: 'Topic Object Validation',
-          required: ['id', 'name', 'description'],
-          properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
-            name: {
-              bsonType: 'string',
-              description: "'name' must be a string and is required",
-            },
-            description: {
-              bsonType: 'string',
-              description: "'description' must be a string and is required",
-            },
-          },
-        },
-      },
-    });
 
-    await database.collection('topic').insertMany(TOPICS);
     await database.collection('topic').insertMany(TOPICS);
 
     await database.createCollection('activity', {
@@ -150,61 +109,7 @@ async function initializeDatabase() {
         },
       },
     });
-    await database.createCollection('activity', {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          title: 'Activity Object Validation',
-          required: ['id', 'topic_id', 'name', 'type'],
-          properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
-            topic_id: {
-              bsonType: 'string',
-              description: "'topic_id' must be a string and is required",
-            },
-            name: {
-              bsonType: 'string',
-              description: "'name' must be a string and is required",
-            },
-            type: {
-              bsonType: 'string',
-              description: "'type' must be a string and is required",
-            },
-          },
-        },
-      },
-    });
 
-    await database.createCollection('student', {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          title: 'Student Object Validation',
-          required: ['id', 'name', 'email', 'password'],
-          properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
-            name: {
-              bsonType: 'string',
-              description: "'name' must be a string and is required",
-            },
-            email: {
-              bsonType: 'string',
-              description: "'email' must be a string and is required",
-            },
-            password: {
-              bsonType: 'string',
-              description: "'password' must be a string and is required",
-            },
-          },
-        },
-      },
-    });
     await database.createCollection('student', {
       validator: {
         $jsonSchema: {
@@ -262,41 +167,6 @@ async function initializeDatabase() {
 
     // Dummy data
     await insertERDiagramsData(database);
-    await insertDatabaseConnectionData(database);
-
-  } catch (e) {
-    console.error(e);
-  } finally {
-    await client.close();
-  }
-    await database.createCollection('student_activity_join', {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          title: 'Student Activity Join Object Validation',
-          required: ['student_id', 'activity_id', 'is_completed'],
-          properties: {
-            student_id: {
-              bsonType: 'string',
-              description: "'student_id' must be a string and is required",
-            },
-            activity_id: {
-              bsonType: 'string',
-              description: "'activity_id' must be a string and is required",
-            },
-            is_completed: {
-              bsonType: 'bool',
-              description: "'is_completed' must be a boolean and is required",
-            },
-          },
-        },
-      },
-    });
-
-    // Indexes
-    await createIndexes(database);
-
-    // Dummy data for database-connection-to-frontend
     await insertDatabaseConnectionData(database);
   } catch (e) {
     console.error(e);
