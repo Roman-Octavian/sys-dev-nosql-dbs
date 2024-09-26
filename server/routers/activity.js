@@ -32,8 +32,6 @@ router.get('/activity/incomplete/:name', async (req, res) => {
       return res.status(404).json({ error: 'Student not found' });
     }
 
-    console.log(student);
-
     const incompleteActivities = await database
       .collection('student_activity_join')
       .aggregate([
@@ -69,7 +67,7 @@ router.get('/activity/incomplete/:name', async (req, res) => {
         },
       ])
       .toArray();
-    console.log(incompleteActivities);
+
     return res.status(200).json(incompleteActivities);
   } catch (e) {
     console.error('Error fetching incomplete activities:', e);
