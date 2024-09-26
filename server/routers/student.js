@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import { database } from '../database/connection.js';
-import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
@@ -46,7 +45,7 @@ router.post('/student', async (req, res) => {
       }
 
       // Generate JWT after login
-      const token = jwt.sign({ email: student.email, id: student.id }, process.env.SECRET_KEY, {
+      const token = jwt.sign({ email: student.email, _id: student._id }, process.env.SECRET_KEY, {
         expiresIn: '1h',
       });
       // Return the token in the response
@@ -65,7 +64,6 @@ router.post('/student', async (req, res) => {
       // Hash the password before storing it in the database
       const hashedPassword = await bcrypt.hash(password, 10);
       const newStudent = {
-        id: nanoid(),
         name,
         email,
         password: hashedPassword,
@@ -75,7 +73,7 @@ router.post('/student', async (req, res) => {
         await studentCollection.insertOne(newStudent);
         // Generate JWT after signup
         const token = jwt.sign(
-          { email: newStudent.email, id: newStudent.id },
+          { email: newStudent.email, _id: newStudent._id },
           process.env.SECRET_KEY,
           { expiresIn: '1h' },
         );
