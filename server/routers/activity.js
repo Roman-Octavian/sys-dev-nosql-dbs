@@ -39,7 +39,7 @@ router.get('/activity/incomplete/:name', async (req, res) => {
           $lookup: {
             from: 'activity',
             localField: 'activity_id',
-            foreignField: 'id',
+            foreignField: '_id',
             as: 'activity_details',
           },
         },
@@ -47,13 +47,13 @@ router.get('/activity/incomplete/:name', async (req, res) => {
           $lookup: {
             from: 'topic',
             localField: 'activity_details.topic_id',
-            foreignField: 'id',
+            foreignField: '_id',
             as: 'topic_details',
           },
         },
         {
           $match: {
-            student_id: student.id,
+            student_id: student._id,
             is_completed: false,
             'topic_details.name': topicName,
           },
@@ -93,7 +93,7 @@ router.get('/activity/quizzes/:topicname', async (req, res) => {
           $lookup: {
             from: 'activity',
             localField: 'activity_id',
-            foreignField: 'id',
+            foreignField: '_id',
             as: 'activity_details',
           },
         },
@@ -101,13 +101,13 @@ router.get('/activity/quizzes/:topicname', async (req, res) => {
           $lookup: {
             from: 'topic',
             localField: 'activity_details.topic_id',
-            foreignField: 'id',
+            foreignField: '_id',
             as: 'topic_details',
           },
         },
         {
           $match: {
-            student_id: student.id,
+            student_id: student._id,
             'topic_details.name': topicName,
             activity_details: { $elemMatch: { type: 'quiz' } },
           },

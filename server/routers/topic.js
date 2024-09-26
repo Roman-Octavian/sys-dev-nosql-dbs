@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { database } from '../database/connection.js';
-import { nanoid } from 'nanoid';
+import { BSON } from 'mongodb';
 
 const router = Router();
 const topicsCollection = database.collection('topic');
 
-router.get('/topic', async (req, res) => {
+router.get('/topic', async (_req, res) => {
   try {
     const topics = await topicsCollection.find({}).toArray();
     return res.status(200).send(topics);
@@ -18,8 +18,8 @@ router.get('/topic', async (req, res) => {
 // GET a specific topic by id
 router.get('/topic/:id', async (req, res) => {
   try {
-    const id = decodeURIComponent(req.params.id);
-    const topicData = await topicsCollection.findOne({ id: id });
+    const id = new BSON.ObjectId(decodeURIComponent(req.params.id));
+    const topicData = await topicsCollection.findOne({ _id: id });
 
     if (!topicData) {
       return res.status(404).json({ message: 'topic not found' });
@@ -40,9 +40,7 @@ router.post('/topic', async (req, res) => {
       return res.status(400).json({ message: 'topic data is required' });
     }
 
-    const newTopicId = nanoid();
-    await topicsCollection.insertOne({ id: newTopicId, ...newTopic });
-    const newTopicData = await topicsCollection.findOne({ id: newTopicId });
+    const newTopicData = await topicsCollection.insertOne(newTopic);
 
     return res.status(201).json(newTopicData);
   } catch (error) {
@@ -54,10 +52,10 @@ router.post('/topic', async (req, res) => {
 // PUT update a topic by ID
 router.put('/topic/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = new BSON.ObjectId(req.params.id);
     const updatedTopic = req.body;
 
-    const filter = { id: id };
+    const filter = { _id: id };
     const update = { $set: updatedTopic };
 
     const result = await topicsCollection.updateOne(filter, update);
@@ -77,9 +75,9 @@ router.put('/topic/:id', async (req, res) => {
 // DELETE remove a topic by ID
 router.delete('/topic/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = new BSON.ObjectId(req.params.id);
 
-    const filter = { id: id };
+    const filter = { _id: id };
     const result = await topicsCollection.deleteOne(filter);
 
     if (result.deletedCount === 0) {

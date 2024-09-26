@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid';
-
 export async function insertERDiagramsData(database) {
   try {
     const topicCollection = database.collection('topic');
@@ -14,7 +12,6 @@ export async function insertERDiagramsData(database) {
     }
 
     const student = {
-      id: nanoid(),
       name: 'John',
       email: 'john@example.com',
       password: 'hashed_password',
@@ -23,18 +20,18 @@ export async function insertERDiagramsData(database) {
     console.log('Inserted student:', student);
 
     const activities = [
-      { id: nanoid(), topic_id: erDiagramTopic.id, name: 'ER Diagrams Quiz 1', type: 'quiz' },
-      { id: nanoid(), topic_id: erDiagramTopic.id, name: 'ER Diagrams Quiz 2', type: 'quiz' },
-      { id: nanoid(), topic_id: erDiagramTopic.id, name: 'ER Diagrams Tutorial', type: 'tutorial' },
+      { topic_id: erDiagramTopic._id, name: 'ER Diagrams Quiz 1', type: 'quiz' },
+      { topic_id: erDiagramTopic._id, name: 'ER Diagrams Quiz 2', type: 'quiz' },
+      { topic_id: erDiagramTopic._id, name: 'ER Diagrams Tutorial', type: 'tutorial' },
     ];
 
     const activityResult = await activityCollection.insertMany(activities);
     console.log('Inserted activities:', activityResult.insertedIds);
 
     const studentActivities = [
-      { student_id: student.id, activity_id: activities[0].id, is_completed: false },
-      { student_id: student.id, activity_id: activities[1].id, is_completed: true },
-      { student_id: student.id, activity_id: activities[2].id, is_completed: false },
+      { student_id: student._id, activity_id: activities[0]._id, is_completed: false },
+      { student_id: student._id, activity_id: activities[1]._id, is_completed: true },
+      { student_id: student._id, activity_id: activities[2]._id, is_completed: false },
     ];
 
     const joinResult = await studentActivityJoinCollection.insertMany(studentActivities);

@@ -1,36 +1,30 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
-import { nanoid } from 'nanoid';
 import { insertDocumentDatabaseData } from './dummyDataDCDB.js';
 import { insertERDiagramsData } from './dummyDataERD.js';
 import { insertDatabaseConnectionData } from './dummyDataFrontend.js';
 
 const TOPICS = [
   {
-    id: nanoid(),
     name: 'Document Databases',
     description:
       'A document database (also known as a document-oriented database or a document store) is a database that stores information in documents',
   },
   {
-    id: nanoid(),
     name: 'Normalization',
     description:
       'Database normalization is the process of organizing data into tables in such a way that the results of using the database are always unambiguous and as intended. Such normalization is intrinsic to relational database theory.',
   },
   {
-    id: nanoid(),
     name: 'ER Diagrams',
     description:
       'An entity-relationship model describes interrelated things of interest in a specific domain of knowledge. A basic ER model is composed of entity types and specifies relationships that can exist between entities.',
   },
   {
-    id: nanoid(),
     name: 'Document Databases CRUD methods',
     description: 'Create, Read, Update, Delete',
   },
   {
-    id: nanoid(),
     name: 'Database Connection to Frontend',
     description: 'How to connect a document database to a web front-end page',
   },
@@ -58,17 +52,18 @@ async function initializeDatabase() {
 
     const database = client.db(process.env.DATABASE_NAME);
 
+    // Drop database if it already exists to prevent duplicates
+    if ((await database.collections()).length > 0) {
+      await database.dropDatabase();
+    }
+
     await database.createCollection('topic', {
       validator: {
         $jsonSchema: {
           bsonType: 'object',
           title: 'Topic Object Validation',
-          required: ['id', 'name', 'description'],
+          required: ['name', 'description'],
           properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
             name: {
               bsonType: 'string',
               description: "'name' must be a string and is required",
@@ -82,21 +77,15 @@ async function initializeDatabase() {
       },
     });
 
-    await database.collection('topic').insertMany(TOPICS);
-
     await database.createCollection('activity', {
       validator: {
         $jsonSchema: {
           bsonType: 'object',
           title: 'Activity Object Validation',
-          required: ['id', 'topic_id', 'name', 'type'],
+          required: ['topic_id', 'name', 'type'],
           properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
             topic_id: {
-              bsonType: 'string',
+              bsonType: 'objectId',
               description: "'topic_id' must be a string and is required",
             },
             name: {
@@ -117,12 +106,8 @@ async function initializeDatabase() {
         $jsonSchema: {
           bsonType: 'object',
           title: 'Student Object Validation',
-          required: ['id', 'name', 'email', 'password'],
+          required: ['name', 'email', 'password'],
           properties: {
-            id: {
-              bsonType: 'string',
-              description: "'id' must be a string and is required",
-            },
             name: {
               bsonType: 'string',
               description: "'name' must be a string and is required",
@@ -148,11 +133,11 @@ async function initializeDatabase() {
           required: ['student_id', 'activity_id', 'is_completed'],
           properties: {
             student_id: {
-              bsonType: 'string',
+              bsonType: 'objectId',
               description: "'student_id' must be a string and is required",
             },
             activity_id: {
-              bsonType: 'string',
+              bsonType: 'objectId',
               description: "'activity_id' must be a string and is required",
             },
             is_completed: {
@@ -168,6 +153,7 @@ async function initializeDatabase() {
     await createIndexes(database);
 
     // Dummy data
+    await database.collection('topic').insertMany(TOPICS);
     await insertERDiagramsData(database);
     await insertDatabaseConnectionData(database);
     await insertDocumentDatabaseData(database);

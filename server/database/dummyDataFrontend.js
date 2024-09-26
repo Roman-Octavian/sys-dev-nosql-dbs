@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid';
-
 export async function insertDatabaseConnectionData(database) {
   try {
     const topicCollection = database.collection('topic');
@@ -21,26 +19,22 @@ export async function insertDatabaseConnectionData(database) {
 
     const activities = [
       {
-        id: nanoid(),
-        topic_id: dbConnectionTopic.id,
+        topic_id: dbConnectionTopic._id,
         name: 'Database Connection Quiz 1',
         type: 'quiz',
       },
       {
-        id: nanoid(),
-        topic_id: dbConnectionTopic.id,
+        topic_id: dbConnectionTopic._id,
         name: 'Database Connection Quiz 2',
         type: 'quiz',
       },
       {
-        id: nanoid(),
-        topic_id: dbConnectionTopic.id,
+        topic_id: dbConnectionTopic._id,
         name: 'Database Connection Quiz 3',
         type: 'quiz',
       },
       {
-        id: nanoid(),
-        topic_id: dbConnectionTopic.id,
+        topic_id: dbConnectionTopic._id,
         name: 'Database Connection Quiz 4',
         type: 'quiz',
       },
@@ -50,10 +44,10 @@ export async function insertDatabaseConnectionData(database) {
     console.log('Inserted activities:', activityResult.insertedIds);
 
     const studentActivities = [
-      { student_id: student.id, activity_id: activities[0].id, is_completed: false },
-      { student_id: student.id, activity_id: activities[1].id, is_completed: true },
-      { student_id: student.id, activity_id: activities[2].id, is_completed: false },
-      { student_id: student.id, activity_id: activities[3].id, is_completed: true },
+      { student_id: student._id, activity_id: activities[0]._id, is_completed: false },
+      { student_id: student._id, activity_id: activities[1]._id, is_completed: true },
+      { student_id: student._id, activity_id: activities[2]._id, is_completed: false },
+      { student_id: student._id, activity_id: activities[3]._id, is_completed: true },
     ];
 
     const joinResult = await studentActivityJoinCollection.insertMany(studentActivities);
